@@ -1,7 +1,8 @@
+.ipynb_checkpoints/
 .env
 __pycache__/
 *.pyc
 *.pyo
 logs/
 *.log
-.DS_Storegiy
+.DS_Store
