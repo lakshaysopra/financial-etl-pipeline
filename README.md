@@ -374,4 +374,4 @@ The final system will support cloud-based data processing and business intellige
 
 Lakshay Sopra
 
-CA Intermediate Group 1 Qualified | Finance & Data Engineering Enthusiast
+| Data Engineering Enthusiast | CA Inter Group 1 Qualified 
