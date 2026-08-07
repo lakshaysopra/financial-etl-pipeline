@@ -1,6 +1,6 @@
 from pyspark.sql import SparkSession
 
-from config import (
+from config.config import (
      SPARK_APP_NAME,
     AWS_ACCESS_KEY_ID,
     AWS_SECRET_ACCESS_KEY,
@@ -37,6 +37,16 @@ def create_spark_session():
         .config(
             "spark.hadoop.fs.s3a.impl",
             "org.apache.hadoop.fs.s3a.S3AFileSystem"
+        )
+
+        .config(
+            "spark.local.dir",
+            "C:/spark-temp"
+        )
+
+        .config(
+            "spark.hadoop.fs.s3a.buffer.dir",
+            "C:/spark-temp"
         )
 
         .getOrCreate()

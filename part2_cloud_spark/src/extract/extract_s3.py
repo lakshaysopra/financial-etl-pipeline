@@ -1,6 +1,6 @@
 from pyspark.sql import DataFrame
 
-from config import ( AWS_BUCKET, RAW_PREFIX, RAW_FILE )
+from config.config import ( AWS_BUCKET, RAW_PREFIX, RAW_FILE )
 
 def extract_from_s3(spark) -> DataFrame:
     

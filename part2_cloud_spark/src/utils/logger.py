@@ -1,6 +1,6 @@
 import logging
 
-from config import LOG_LEVEL
+from config.config import LOG_LEVEL
 
 
 logging.basicConfig(

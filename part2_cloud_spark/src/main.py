@@ -4,6 +4,7 @@ from transform.explore_data import explore_data
 from transform.transform_data import transform_data
 from transform.kpi_transformation import calculate_kpis
 from validation.validate_data import validate_dataset
+from load.write_parquet import write_parquet
 
 from utils.logger import logger
 
@@ -33,12 +34,16 @@ def main():
     
 
     # Step 8 - Validation phase
-    validate_dataset(df)
+    # validate_dataset(df)
+
+    # Step 9 - laod parquet to s3
+
+    write_parquet(df)
 
     # # Review
     # df.show(100, truncate=False)
     
-    #step 9
+    #step 10
     logger.info("Stopping Spark session...")
     spark.stop()
 
