@@ -1,0 +1,27 @@
+Change both occurrences:
+
+.config(
+    "spark.local.dir",
+    "C:/spark-temp"
+)
+
+to:
+
+.config(
+    "spark.local.dir",
+    "/tmp/spark-temp"
+)
+
+and:
+
+.config(
+    "spark.hadoop.fs.s3a.buffer.dir",
+    "C:/spark-temp"
+)
+
+to:
+
+.config(
+    "spark.hadoop.fs.s3a.buffer.dir",
+    "/tmp/spark-temp"
+)

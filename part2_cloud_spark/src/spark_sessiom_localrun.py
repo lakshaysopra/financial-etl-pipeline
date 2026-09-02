@@ -13,9 +13,11 @@ def create_spark_session():
         SparkSession.builder
         .appName(SPARK_APP_NAME)
 
-        # spark.jars.packages removed — hadoop-aws + transitive deps
-        # are baked into the image at build time instead.
-        .config("spark.sql.shuffle.partitions", "25")
+        .config(
+            "spark.jars.packages",
+            "org.apache.hadoop:hadoop-aws:3.4.2"
+        )
+
 
         .config(
             "spark.hadoop.fs.s3a.access.key",
@@ -39,12 +41,12 @@ def create_spark_session():
 
         .config(
             "spark.local.dir",
-            "/tmp/spark-temp"
+            "C:/spark-temp"
         )
 
         .config(
             "spark.hadoop.fs.s3a.buffer.dir",
-            "/tmp/spark-temp"
+            "C:/spark-temp"
         )
 
         .getOrCreate()

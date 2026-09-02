@@ -1,11 +1,13 @@
 import logging
+import sys
 
 from config.config import LOG_LEVEL
 
 
 logging.basicConfig(
     level=LOG_LEVEL,
-    format="%(asctime)s | %(levelname)s | %(message)s"
+    format="%(levelname)s | %(message)s",
+    stream=sys.stdout,
 )
 
 logger = logging.getLogger(__name__)
