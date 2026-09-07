@@ -1,5 +1,5 @@
 # 📊 Financial ETL Pipeline
-### End-to-End Financial Data Engineering & Analytics Pipeline using Python, Pandas, PySpark, AWS, PostgreSQL, Apache Airflow & Power BI
+### End-to-End Financial Data Engineering & Analytics Pipeline using Python, Pandas, PySpark, AWS S3 ,AWS redshift, PostgreSQL, Apache Airflow & Power BI
 
 ---
 
@@ -95,9 +95,9 @@ Major components include:
 
 ---
 
-# Part 2 — Production Data Engineering Pipeline (In Progress)
+# Part 2 — Production Data Engineering Pipeline (Completed)
 
-The second phase transforms the project into a production-style cloud data engineering solution using PySpark and AWS technologies.
+The second phase transforms the project into a production-style cloud data engineering solution using PySpark, AWS technologies and airflow.
 
 Completed Components
 
@@ -111,13 +111,12 @@ Completed Components
 - Production Data Validation Framework
 - Logging
 - Testing Utilities
-
-Upcoming Components
-
 - Parquet Data Lake
 - Amazon Redshift
 - Apache Airflow Orchestration
 - Power BI Dashboard
+
+
 
 ### Architecture
 
@@ -166,11 +165,12 @@ Upcoming Components
 | Big Data Framework | Apache Spark |
 | Database | PostgreSQL |
 | Cloud Storage | Amazon S3 |
-| Data Warehouse | PostgreSQL, Amazon Redshift *(In Progress)* |
+| Data Warehouse | PostgreSQL, Amazon Redshift Serverless |
 | File Format | CSV, Parquet |
-| SQL | PostgreSQL SQL |
-| Workflow Orchestration | Apache Airflow *(In Progress)* |
-| Data Visualization | Power BI *(In Progress)* |
+| SQL | PostgreSQL SQL, Redshift SQL |
+| Workflow Orchestration | Apache Airflow |
+| Containerization | Docker, Docker Compose |
+| Data Visualization | Power BI |
 | Development Environment | Jupyter Notebook, VS Code |
 | Version Control | Git |
 | Repository Hosting | GitHub |
@@ -367,123 +367,16 @@ Major cleaning activities include:
 - Invalid value correction
 - Consistent naming conventions
 
-Example:
 
-```python
-df = df.replace([np.inf, -np.inf], np.nan)
-```
+- The resulting dataset becomes suitable for financial calculations and SQL warehousing.
 
-The resulting dataset becomes suitable for financial calculations and SQL warehousing.
 
----
 
 # Financial KPI Engineering
 
 After cleaning, multiple financial KPIs were engineered to support profitability analysis, growth measurement, efficiency evaluation, and financial risk assessment.
 
-## Profitability Metrics
 
-### Profit Margin
-
-Measures the percentage of revenue retained as profit after all expenses.
-
-Formula
-
-```text
-(Net Profit / Sales) × 100
-```
-
----
-
-### Operating Profit Margin (OPM)
-
-Measures operating profitability before financing costs and taxes.
-
-Formula
-
-```text
-(Operating Profit / Sales) × 100
-```
-
----
-
-## Efficiency Metrics
-
-### Expense Ratio
-
-Measures operating expenses relative to revenue.
-
-Formula
-
-```text
-(Expenses / Sales) × 100
-```
-
----
-
-## Financial Risk Metrics
-
-### Interest Coverage Ratio
-
-Measures a company's ability to meet interest obligations.
-
-Formula
-
-```text
-Operating Profit / Interest
-```
-
----
-
-### Interest Burden Ratio
-
-Measures the impact of financing costs on operating profitability.
-
-Formula
-
-```text
-(Profit Before Tax / Operating Profit) × 100
-```
-
----
-
-### Tax Burden Ratio
-
-Measures the proportion of profit retained after taxation.
-
-Formula
-
-```text
-(Net Profit / Profit Before Tax) × 100
-```
-
----
-
-## Growth Metrics
-
-### Revenue Growth
-
-Year-over-Year sales growth.
-
----
-
-### Profit Growth
-
-Year-over-Year profit growth.
-
----
-
-### EPS Growth
-
-Year-over-Year earnings per share growth.
-
----
-
-### CAGR (Compound Annual Growth Rate)
-
-Measures long-term business growth across multiple financial years.
-
----
 
 # Load Phase
 
@@ -506,7 +399,7 @@ The warehouse contains:
 - Risk metrics
 - Company-level analytical data
 
----
+
 
 # SQL Analytics Layer
 
@@ -607,7 +500,7 @@ The pipeline follows a modular Extract → Transform → Validate → Load archi
          Production Data Validation Framework
                           │
                           ▼
-               Parquet Data Lake (Next Phase)
+                  Parquet Data Lake
                           │
                           ▼
               Amazon Redshift Warehouse
@@ -961,6 +854,318 @@ By validating the dataset before loading it into the warehouse, the pipeline ens
 The validation framework acts as a quality gate between transformation and data loading, helping maintain the integrity of the analytics pipeline.
 
 
+# Processed Data Lake
+
+After transformation and validation, the analytics-ready dataset is written in Parquet format to the processed layer in Amazon S3.
+
+## Amazon S3
+
+```text
+raw/
+    │
+    ▼
+PySpark ETL
+    │
+    ▼
+Validation
+    │
+    ▼
+processed/
+    └── company_financials/
+        └── Parquet files
+```
+
+Parquet provides a columnar storage format suitable for analytical workloads and downstream data warehouse ingestion.
+
+# Amazon Redshift
+
+The validated Parquet dataset stored in Amazon S3 is loaded into Amazon Redshift Serverless for analytical querying.
+
+The Redshift warehouse provides a centralized analytical layer for performing business-focused financial analysis.
+
+## Data Flow
+
+```text
+PySpark
+   │
+   ▼
+Validated Dataset
+   │
+   ▼
+Parquet
+   │
+   ▼
+Amazon S3
+   │
+   ▼
+Amazon Redshift
+   │
+   ▼
+SQL Analytics
+```
+
+## Redshift Responsibilities
+
+- Store processed financial data
+- Provide an analytical warehouse layer
+- Support large-scale SQL analysis
+- Enable business-focused financial queries
+- Serve as the analytical source for downstream reporting
+
+**Target warehouse table:**
+
+`company_financials`
+
+# Redshift SQL Analytics
+
+A comprehensive SQL analytics layer was implemented on top of the Amazon Redshift warehouse.
+
+The analysis focuses on extracting business insights from financial statements and engineered KPIs.
+
+## Sales Analysis
+
+Examples include:
+
+- Top companies by revenue
+- Revenue growth analysis
+- Sales trend analysis
+- Declining revenue identification
+- Revenue comparisons across financial years
+
+## Profitability Analysis
+
+Examples include:
+
+- Highest Profit Margin
+- Highest Operating Profit Margin
+- Profitability comparison
+- Companies with strong operating performance
+- Profitability trend analysis
+
+## Growth Analysis
+
+Examples include:
+
+- Revenue Growth Leaders
+- Profit Growth Leaders
+- Highest CAGR
+- Continuous growth analysis
+- Long-term financial growth comparison
+
+## Cost & Efficiency Analysis
+
+Examples include:
+
+- Expense Ratio analysis
+- Depreciation Ratio analysis
+- Operating Leverage analysis
+- Cost efficiency comparison
+- Operating performance analysis
+
+## Financial Risk Analysis
+
+Examples include:
+
+- Interest Coverage analysis
+- Interest Burden analysis
+- Tax Burden analysis
+- Effective Tax Rate analysis
+- Financial deterioration detection
+
+The SQL layer transforms the warehouse from a simple storage system into an analytical platform capable of answering business-oriented financial questions.
+
+# Docker Environment
+
+Docker is used to provide a consistent execution environment for the production-oriented pipeline and Airflow orchestration layer.
+
+The project uses Docker Compose to manage the Airflow environment and its supporting services.
+
+## Docker Responsibilities
+
+- Containerized Airflow environment
+- Consistent runtime environment
+- Spark pipeline execution from Airflow
+- Service isolation
+- Reproducible development environment
+
+The Spark project is mounted into the Airflow environment so that Airflow can execute the production PySpark pipeline.
+
+## Docker Compose
+
+```text
+Docker Compose
+      │
+      ├── Airflow
+      │
+      ├── PostgreSQL
+      │
+      └── Redis
+             │
+             ▼
+       PySpark Pipeline
+```
+
+# Apache Airflow Orchestration
+
+Apache Airflow is used to orchestrate the production PySpark pipeline.
+
+Instead of manually executing the Spark application, Airflow manages the pipeline execution through a DAG.
+
+## Airflow Workflow
+
+```text
+Airflow DAG
+     │
+     ▼
+Spark Pipeline
+     │
+     ├── Extract
+     ├── Explore
+     ├── Transform
+     ├── KPI Engineering
+     ├── Validation
+     └── Load
+     │
+     ▼
+Processed S3 Data
+```
+
+## Airflow Features Implemented
+
+- DAG-based orchestration
+- Scheduled pipeline execution
+- Manual pipeline triggering
+- Retry configuration
+- Failure handling
+- Pipeline execution monitoring
+- Task-level logging
+- Integration with the PySpark application
+
+The DAG is configured using the Asia/Kolkata timezone for scheduling while the underlying Airflow environment operates in UTC.
+
+# Production Pipeline Execution
+
+The complete production pipeline can be executed through Airflow.
+
+The pipeline follows:
+
+```text
+Airflow
+   │
+   ▼
+PySpark
+   │
+   ▼
+Amazon S3 — Raw
+   │
+   ▼
+Data Exploration
+   │
+   ▼
+Data Transformation
+   │
+   ▼
+KPI Engineering
+   │
+   ▼
+Data Validation
+   │
+   ▼
+Amazon S3 — Processed Parquet
+   │
+   ▼
+Amazon Redshift
+   │
+   ▼
+SQL Financial Analysis
+   │
+   ▼
+Power BI
+```
+
+This provides an end-to-end workflow from raw financial data ingestion to business intelligence.
+
+# Power BI Business Intelligence
+
+Power BI is used as the final visualization and business intelligence layer of the pipeline.
+
+The processed financial data and analytical results are used to create interactive financial dashboards.
+
+## Power BI Analysis
+
+The dashboard focuses on:
+
+- Revenue and Sales Trends
+- Net Profit Trends
+- Profit Margin
+- Operating Profit Margin
+- Revenue Growth
+- Profit Growth
+- CAGR
+- Expense Ratio
+- Interest Coverage Ratio
+- Interest Burden Ratio
+- Tax Burden Ratio
+- Effective Tax Rate
+- Depreciation Ratio
+- Operating Leverage
+
+## Dashboard Sections
+
+### Executive Overview
+
+Provides a high-level view of financial performance using key financial KPIs, revenue trends, profit trends, and company comparisons.
+
+### Profitability Analysis
+
+Focuses on:
+
+- Profit Margin
+- Operating Profit Margin
+- Company profitability comparison
+- Profitability trends
+
+### Growth Analysis
+
+Focuses on:
+
+- Revenue Growth
+- Profit Growth
+- CAGR
+- Company growth comparison
+
+### Cost & Efficiency Analysis
+
+Focuses on:
+
+- Expense Ratio
+- Depreciation Ratio
+- Operating Leverage
+- Interest Coverage
+
+### Financial Risk Analysis
+
+Focuses on:
+
+- Interest Burden
+- Tax Burden
+- Effective Tax Rate
+- Financial performance indicators
+
+## Interactive Dashboard Features
+
+The Power BI report provides:
+
+- Interactive KPI cards
+- Company-level analysis
+- Year-wise analysis
+- Company comparison
+- Financial trend analysis
+- Interactive slicers and filters
+- Business-focused financial reporting
+
+---
+
 # Getting Started
 
 ## Prerequisites
@@ -974,7 +1179,9 @@ Before running the project, ensure the following software is installed:
 - Git
 - AWS Account
 - AWS CLI (configured)
+- Docker Desktop
 - Visual Studio Code or Jupyter Notebook
+- Power BI Desktop
 
 ---
 
@@ -984,11 +1191,8 @@ Before running the project, ensure the following software is installed:
 
 ```bash
 git clone https://github.com/lakshaysopra/financial-etl-pipeline.git
-
 cd financial-etl-pipeline
 ```
-
----
 
 ## Create a Virtual Environment
 
@@ -998,19 +1202,17 @@ python -m venv venv
 
 Activate the environment.
 
-Windows
+### Windows
 
 ```bash
 venv\Scripts\activate
 ```
 
-Linux / macOS
+### Linux / macOS
 
 ```bash
 source venv/bin/activate
 ```
-
----
 
 ## Install Dependencies
 
@@ -1026,62 +1228,21 @@ pip install -r requirements.txt
 pip install -r part2_cloud_spark/requirements.txt
 ```
 
----
-
 # Configuration
 
-Before executing the pipeline, update the configuration file with your environment settings.
+Before executing the pipeline, configure the required environment settings.
 
-Example:
+Configuration includes:
 
-- AWS Credentials
-- S3 Bucket Name
-- PostgreSQL Credentials
-- Spark Configuration
-- Redshift Configuration *(when implemented)*
+- AWS credentials
+- S3 bucket name
+- S3 raw and processed paths
+- PostgreSQL credentials
+- Spark configuration
+- Amazon Redshift configuration
+- Airflow environment configuration
 
----
-
-# Running the Project
-
-## Part 1 — Pandas ETL
-
-Run the notebooks sequentially:
-
-1. Data Exploration
-2. Data Cleaning
-3. KPI Engineering
-4. PostgreSQL Loading
-5. SQL Analytics
-
----
-
-## Part 2 — PySpark Pipeline
-
-Execute the main application:
-
-```bash
-python part2_cloud_spark/src/main.py
-```
-
-The pipeline automatically performs:
-
-- Spark Session Creation
-- Data Extraction from Amazon S3
-- Data Exploration
-- Data Transformation
-- Financial KPI Engineering
-- Production Data Validation
-- Logging
-- Pipeline Completion
-
-Future versions will additionally:
-
-- Write Parquet files
-- Load into Amazon Redshift
-- Trigger Airflow DAGs
-
----
+Sensitive credentials are managed through environment variables and configuration files rather than being hard-coded into the pipeline.
 
 # Project Highlights
 
@@ -1089,24 +1250,21 @@ This project demonstrates practical implementation of:
 
 ## Data Engineering
 
+- Data Engineering
 - End-to-End ETL Pipeline
 - Cloud Data Engineering
 - Production ETL Design
-- Data Validation Framework
 - Data Quality Engineering
+- Production Data Validation
 - Distributed Data Processing
-
----
-
-## Big Data
-
+- Data Lake Architecture
+- Big Data
 - Apache Spark
 - PySpark
 - Distributed Transformations
 - Window Functions
+- Spark DataFrame Operations
 - Performance-Oriented Processing
-
----
 
 ## Financial Analytics
 
@@ -1116,27 +1274,46 @@ This project demonstrates practical implementation of:
 - Profitability Analysis
 - Operational Efficiency Analysis
 - Financial Risk Assessment
-
----
+- Business SQL Analytics
 
 ## Cloud Technologies
 
 - Amazon S3
-- Cloud Storage
-- Data Lake Architecture
-- Amazon Redshift *(In Progress)*
-- Apache Airflow *(In Progress)*
+- Cloud Data Lake
+- Amazon Redshift Serverless
+- AWS-based ETL
+- Cloud Data Warehousing
 
----
+## Workflow Orchestration
+
+- Apache Airflow
+- DAG Development
+- Scheduled ETL Execution
+- Retry Handling
+- Pipeline Monitoring
+
+## Containerization
+
+- Docker
+- Docker Compose
+- Containerized Airflow Environment
+- Reproducible Execution Environment
+
+## Business Intelligence
+
+- Power BI
+- Financial KPI Dashboards
+- Interactive Data Visualization
+- Business Reporting
+- Financial Trend Analysis
 
 ## Database
 
 - PostgreSQL
+- Amazon Redshift
 - SQL Analytics
 - Data Warehousing
 - Business Query Development
-
----
 
 ## Software Engineering
 
@@ -1147,65 +1324,25 @@ This project demonstrates practical implementation of:
 - Git Workflow
 - GitHub Version Control
 
----
-
-# Future Enhancements
-
-The next phase of the project will further enhance the production pipeline by introducing cloud-native data warehousing and orchestration.
-
-Planned enhancements include:
-
-### Data Storage
-
-- Store validated datasets as Parquet files
-- Partition data for efficient querying
-- Build a cloud-based data lake
-
----
-
-### Data Warehouse
-
-- Load Parquet files into Amazon Redshift
-- Implement optimized warehouse schema
-- Perform warehouse-level validation
-
----
-
-### Workflow Orchestration
-
-- Build Apache Airflow DAGs
-- Schedule automated ETL execution
-- Configure retry and failure handling
-- Implement monitoring and alerting
-
----
-
-### Business Intelligence
-
-- Build interactive Power BI dashboards
-- Visualize financial KPIs
-- Create executive business reports
-- Enable self-service analytics
-
----
-
-# Repository Statistics
-
-Current project includes:
+# The project currently includes:
 
 - Two complete ETL pipelines
+- Production PySpark ETL pipeline
 - 20-step Production Validation Framework
 - 13 Financial KPIs
 - Modular PySpark Architecture
-- PostgreSQL Data Warehouse
-- SQL Analytics Layer
-- AWS S3 Integration
+- AWS S3 Data Lake
+- Amazon Redshift Serverless Warehouse
+- Comprehensive Redshift SQL Analytics
+- Apache Airflow Orchestration
+- Docker-based execution environment
 - Production Logging
 - Testing Utilities
+- Power BI Business Intelligence Layer
+- PostgreSQL Data Warehouse
+- Git & GitHub Version Control
 
-The repository continues to evolve toward a complete production-grade cloud data engineering solution.
-
----
+The project demonstrates an end-to-end progression from traditional Python-based ETL to a cloud-oriented, distributed, orchestrated, and analytics-driven Data Engineering architecture.
 
 # Learning Outcomes
 
@@ -1216,37 +1353,36 @@ This project strengthened practical experience in:
 - PySpark
 - SQL
 - PostgreSQL
+- Amazon Redshift
 - Apache Spark
-- AWS S3
+- Amazon S3
+- Apache Airflow
+- Docker
+- Power BI
 - Financial Analytics
 - Data Validation
 - ETL Pipeline Design
 - Cloud Data Engineering
+- Data Warehousing
+- Workflow Orchestration
+- Business Intelligence
 - Software Engineering Best Practices
-
----
 
 # Author
 
-## Lakshay Sopra
+**Lakshay Sopra**
 
-**Aspiring Data Engineer | Finance Background | ETL & Cloud Data Engineering Enthusiast**
+*Aspiring Data Engineer | Finance Background | ETL & Cloud Data Engineering Enthusiast*
 
 This project reflects my journey of combining financial domain knowledge with modern data engineering practices.
 
-My objective is to design scalable, reliable, and production-ready data pipelines while continuously expanding my expertise in cloud technologies, big data processing, and analytics engineering.
-
----
+My objective is to design scalable, reliable, and production-ready data pipelines while continuously expanding my expertise in cloud technologies, big data processing, data warehousing, orchestration, and analytics engineering.
 
 # Connect
 
 If you have suggestions, feedback, or would like to discuss data engineering, analytics, or cloud technologies, feel free to connect through GitHub.
 
-GitHub:
+**GitHub:**
+
 https://github.com/lakshaysopra
 
----
-
-
-
-Feel free to use this repository for learning, educational purposes, and inspiration. Please provide appropriate attribution if you reuse significant portions of the project.
